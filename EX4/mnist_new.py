@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-__author__ = 'Yangel'
 # import matplotlib.pyplot as plt
 # import displaydata.displayData as dsp
 # import numpy as np
 # import scipy.optimize as op
-#
 # import scipy.io as scio
 # import random
 # import os
@@ -147,18 +143,25 @@ th = scio.loadmat('ex4weights.mat');
 Theta1 = th['Theta1']
 Theta2 = th['Theta2']
 
+
+
 list_theta1 = Theta1.flatten();
 list_theta2 = Theta2.flatten();
+# nn_params = np.append(list_theta1,list_theta2);
 nn_params = np.append(list_theta1,list_theta2);
 # print(nn_params.shape)
-# nnCostFunction(nn_params,input_layer_size,hidden_layer_size,num_labels,x,y,1)
+# nnCostFunction(theta_temp,input_layer_size,hidden_layer_size,num_labels,x,y,1)
 # print(Theta1.shape, Theta2.shape)
 initial_Theta1 = randInitializeWeights(input_layer_size,hidden_layer_size);
 initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
 initial_Theta1_temp = initial_Theta1.flatten();
 initial_Theta2_temp = initial_Theta2.flatten();
 initial_nn_params = np.append(initial_Theta1_temp,initial_Theta2_temp);
+print(initial_nn_params.shape)
 lamda = 3
 Result = op.minimize(fun = nnCostFunction,x0 = initial_nn_params,args = ( input_layer_size, hidden_layer_size,
-                   num_labels, x, y, lamda), method = 'TNC',jac=gradient)
-print(Result);
+                   num_labels, x, y, lamda), method = 'L-BFGS-B',jac=gradient)
+rr = Result.x;
+print(rr.shape)
+np.save("nn_theta2",rr);
+np.savetxt("nn_theta2.txt",rr);

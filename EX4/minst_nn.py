@@ -61,8 +61,16 @@ print('\nLoading Saved Neural Network Parameters ...\n')
 theta = scio.loadmat('ex4weights.mat');
 Theta1 = theta['Theta1'];
 Theta2 = theta['Theta2'];
+print(Theta1.shape,Theta2.shape)
+theta_temp = np.load("nn_theta.npy");
+theta_temp1 = theta_temp[:25*401];
+theta_temp2 = theta_temp[25*401:];
+print(theta_temp1.shape,theta_temp2.shape)
+theta_temp1 = theta_temp1.reshape((25,401));
+theta_temp2 = theta_temp2.reshape((10,26));
 
-p = predict(Theta1,Theta2,x);
+# p = predict(Theta1,Theta2,x);
+p = predict(theta_temp1,theta_temp2,x);
 temp = y.flatten()
 print('\nTraining Set Accuracy: %f\n', np.mean((p == temp)) * 100);
 
@@ -70,5 +78,5 @@ for i in range(m):
     index = int(random.random()*m);
     # print(index)
     dsp.displayData(x[index:index+1,:],20)
-    pred = predict(Theta1,Theta2,x[index:index+1,:]);
+    pred = predict(theta_temp1,theta_temp2,x[index:index+1,:]);
     print(pred[0]);
